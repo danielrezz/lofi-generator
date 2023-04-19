@@ -24,7 +24,7 @@ var leadOptions = [
   'electric guitar',
   'acoustic guitar',
   'piano',
-  'synth',
+  'synthesizer',
   'saxophone',
   'kalimba',
 ];
@@ -35,21 +35,39 @@ let options = [drumOptions, ambOptions, padOptions, leadOptions, bassOptions];
 let generatedOptions = [];
 let tempo;
 let button = document.getElementById('generateBtn');
+let listContainer = document.querySelector('#instrumentList');
+// listContainer.innerHTML = '';
 
-let printArray = function (arr) {
-  if (typeof arr == 'object') {
-    for (var i = 0; i < arr.length; i++) {
-      printArray(arr[i]);
-    }
-  } else console.log(arr);
+let refreshOptions = () => {
+  for (var i = 0; i < options.length; i++) {
+    let secondOptions = options[i];
+    let instrument =
+      secondOptions[Math.floor(Math.random() * secondOptions.length)];
+
+    generatedOptions.push(instrument);
+  }
 };
 
-printArray(options);
+// console.log(generatedOptions);
 
-// for (let i = 0; i < 9; i++) {
-//     str = str + i;
-//   }
+let generateList = (arr) => {
+  let li;
 
-// let drum = drumOptions[Math.floor(Math.random() * drumOptions.length)];
+  arr.forEach(function (item) {
+    if (Array.isArray(item)) {
+      // if it's an array
+      generateList(li, item); // call arrToUl with the li as the root
+      return;
+    }
 
-// console.log(drum);
+    li = document.createElement('li'); // create a new list item
+    li.appendChild(document.createTextNode(item)); // append the text to the li
+    listContainer.appendChild(li); // append the list item to the ul
+  });
+};
+
+button.addEventListener('click', function () {
+  listContainer.innerHTML = '';
+  refreshOptions();
+  generateList(generatedOptions);
+});
